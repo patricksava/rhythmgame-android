@@ -40,6 +40,8 @@ public class GameActivity extends AppCompatActivity implements MovementActionCli
     private int life = 100;
     private int tick = 0;
 
+    private int lastHitPoints = -1;
+
     private Handler gameTimer = new Handler();
     private Runnable gameTick = new Runnable() {
         @Override
@@ -52,13 +54,24 @@ public class GameActivity extends AppCompatActivity implements MovementActionCli
             updateStats();
 
             if(life <= 0){
-                gameTimer.removeCallbacks(gameTick);
-
-                Intent it = new Intent(GameActivity.this, GameOverActivity.class);
-                startActivity(it);
+                gameOver();
             }
         }
     };
+
+    private void gameResults() {
+        gameTimer.removeCallbacks(gameTick);
+
+        Intent it = new Intent(GameActivity.this, GameOverActivity.class);
+        startActivity(it);
+    }
+
+    private void gameOver() {
+        gameTimer.removeCallbacks(gameTick);
+
+        Intent it = new Intent(GameActivity.this, GameOverActivity.class);
+        startActivity(it);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,7 +105,19 @@ public class GameActivity extends AppCompatActivity implements MovementActionCli
 
     private void startGame(){
         gameTimer.post(gameTick);
+
+        musicPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                if (life <= 0)
+                    gameOver();
+
+                gameResults();
+            }
+        });
+        time = musicPlayer.getDuration();
         musicPlayer.start();
+
     }
 
     public void handleMovementAction(MovementAction ma, int hitPoints){
@@ -101,6 +126,14 @@ public class GameActivity extends AppCompatActivity implements MovementActionCli
         if(hitPoints > 0){
             MediaPlayer mp = MediaPlayer.create(this, R.raw.normalshot);
             mp.start();
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.stop();
+                    mp.release();
+                }
+            });
+
             combo++;
             score += hitPoints * (1 + combo/10);
             life = Math.min(life + 10, 100);
@@ -108,7 +141,7 @@ public class GameActivity extends AppCompatActivity implements MovementActionCli
             combo = 0;
             life -= 10;
         }
-
+        lastHitPoints = hitPoints;
         updateStats();
     }
 
@@ -121,7 +154,7 @@ public class GameActivity extends AppCompatActivity implements MovementActionCli
     }
 
     private void updateStats(){
-        txvScore.setText("Score: " + this.score);
+        txvScore.setText("Score: " + this.score + ((lastHitPoints != -1)?" + " + lastHitPoints : "") );
         txvCombo.setText("Combo: " + this.combo + "x");
 
         LinearLayout.LayoutParams lifeRemParams = (LinearLayout.LayoutParams) lifeRemainingView.getLayoutParams();

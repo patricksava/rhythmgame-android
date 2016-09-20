@@ -3,6 +3,8 @@ package br.com.psava.rhythmgame.classes;
 import android.content.Context;
 import android.text.method.MovementMethod;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import br.com.psava.rhythmgame.interfaces.MovementActionClickListener;
 
@@ -10,7 +12,7 @@ import br.com.psava.rhythmgame.interfaces.MovementActionClickListener;
  * Created by patricksava on 19/09/16.
  */
 
-public class MovementAction extends View {
+public abstract class MovementAction extends FrameLayout {
 
     protected int size;
     protected int sequenceNumber;

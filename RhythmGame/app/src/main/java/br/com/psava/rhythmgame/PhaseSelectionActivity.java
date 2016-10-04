@@ -31,5 +31,13 @@ public class PhaseSelectionActivity extends AppCompatActivity {
                 startActivity(it);
             }
         });
+
+        findViewById(R.id.phase_selection_project).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(PhaseSelectionActivity.this, ProjectPhaseActivity.class);
+                startActivity(it);
+            }
+        });
     }
 }

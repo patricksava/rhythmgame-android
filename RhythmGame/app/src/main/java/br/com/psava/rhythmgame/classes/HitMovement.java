@@ -14,22 +14,26 @@ import br.com.psava.rhythmgame.interfaces.MovementActionClickListener;
 
 public class HitMovement extends MovementAction {
 
-    private View centralView;
-    private View timingView;
+    public static final int MAX_TIMING = 100;
 
-    private int timing = 100;
-    private static final int MAX_TIMING = 100;
-
-    private final int TIMING_REDUCTION = 2;
+    public static final int TIMING_REDUCTION = 2;
 
     public static final int HIT_MISS = 0;
     public static final int HIT_GOOD = 50;
     public static final int HIT_GREAT = 100;
     public static final int HIT_PERFECT = 300;
 
-    public static final int MISS_HIT_FACTOR = 35;
-    public static final int GOOD_HIT_FACTOR = 65;
+    public static final int MISS_HIT_FACTOR = 45;
+    public static final int GOOD_HIT_FACTOR = 75;
     public static final int PERFECT_HIT_FACTOR  = 90;
+
+    public static final int CENTRAL_SIZE = 100;
+    public static final int DELAY_MILLIS = 25;
+
+    private View centralView;
+    private View timingView;
+
+    private int timing = MAX_TIMING;
 
     private Handler timeoutHandler;
     private Runnable tick = new Runnable() {
@@ -42,7 +46,7 @@ public class HitMovement extends MovementAction {
             } else {
                 //Resize outer circle
                 resizeTimingCircle();
-                timeoutHandler.postDelayed(tick, 25);
+                timeoutHandler.postDelayed(tick, DELAY_MILLIS);
             }
         }
     };
@@ -55,10 +59,10 @@ public class HitMovement extends MovementAction {
 
         this.timeoutHandler = new Handler();
         this.listener = listener;
-        this.size = 100;
+        this.size = CENTRAL_SIZE;
         this.setLayoutParams(new ViewGroup.LayoutParams(size + MAX_TIMING, size + MAX_TIMING));
-        this.setX(x);
-        this.setY(y);
+        this.setX(x - (size + MAX_TIMING)/2.0f);
+        this.setY(y - (size + MAX_TIMING)/2.0f);
 
         centralView.setLayoutParams(new ViewGroup.LayoutParams(size, size));
         centralView.setX(MAX_TIMING/2);

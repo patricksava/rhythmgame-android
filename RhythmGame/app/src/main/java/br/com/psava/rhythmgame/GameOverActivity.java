@@ -29,9 +29,6 @@ public class GameOverActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent it = new Intent(GameOverActivity.this, GameActivity.class);
-
-                //TODO: parametros no intent
-
                 startActivity(it);
             }
         });
@@ -40,9 +37,6 @@ public class GameOverActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent it = new Intent(GameOverActivity.this, PhaseSelectionActivity.class);
-
-                //TODO: parametros no intent
-
                 startActivity(it);
             }
         });

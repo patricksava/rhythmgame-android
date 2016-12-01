@@ -81,10 +81,17 @@ public class ProjectPhaseActivity extends AppCompatActivity implements MovementA
     }
 
     private void finishProject() {
-        musicPlayer.stop();
-        musicPlayer.release();
-
+        try {
+            if (musicPlayer.isPlaying()) {
+                musicPlayer.stop();
+                musicPlayer.release();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         prepareJsonFile();
+
+        finish();
     }
 
     @Override
@@ -99,12 +106,19 @@ public class ProjectPhaseActivity extends AppCompatActivity implements MovementA
             y = event.getY();
             long msShow = System.currentTimeMillis() - start;
             msShow -= HitMovement.MAX_TIMING/HitMovement.TIMING_REDUCTION * HitMovement.DELAY_MILLIS;
-            MovementMetadata mm = new MovementMetadata(x, y, msShow, sequence, (sequence / 10) % 4);
-            ++sequence;
+
+            if(movList != null && movList.size() > 0) {
+                MovementMetadata lastMM = movList.getLast();
+                if (msShow - lastMM.msShow >= 1000)
+                    ++sequence;
+            }
+
+            MovementMetadata mm = new MovementMetadata(x, y, msShow, sequence, sequence % 4);
+
             movList.add(mm);
             mm.logMetadata();
 
-            HitMovement hm = new HitMovement(ProjectPhaseActivity.this, ProjectPhaseActivity.this, x, y);
+            HitMovement hm = new HitMovement(ProjectPhaseActivity.this, ProjectPhaseActivity.this, x, y, sequence % 4);
 
             screen.addView(hm);
         }
@@ -148,12 +162,7 @@ public class ProjectPhaseActivity extends AppCompatActivity implements MovementA
             this.y = y;
             this.msShow = msShow;
             this.seqNum = seqNum;
-            switch (color){
-                case 0: this.seqColor = Color.YELLOW; break;
-                case 1: this.seqColor = Color.BLUE; break;
-                case 2: this.seqColor = Color.GREEN; break;
-                case 3: this.seqColor = Color.RED; break;
-            }
+            this.seqColor = color;
         }
 
         public void logMetadata(){

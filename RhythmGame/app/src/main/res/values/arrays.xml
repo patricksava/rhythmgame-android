@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="songs">
-        <item>Song 1</item>
-        <item>Song 2</item>
+        <item>Centroid</item>
     </string-array>
 </resources>

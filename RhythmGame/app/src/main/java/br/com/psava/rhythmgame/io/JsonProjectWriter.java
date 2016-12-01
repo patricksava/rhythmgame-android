@@ -27,14 +27,14 @@ public class JsonProjectWriter {
 
         // Find the root of the external storage.
         // See http://developer.android.com/guide/topics/data/data-  storage.html#filesExternal
-        File root = android.os.Environment.getExternalStorageDirectory();
+        File root = new File(Environment.getExternalStorageDirectory(), ".rhythmgame");
+        if(!root.exists()) root.mkdirs();
+        Log.d(TAG, "Root dir: " + root.getAbsolutePath());
 
-        // See http://stackoverflow.com/questions/3551821/android-write-to-sd-card-folder
-        File dir = new File (root.getAbsolutePath() + "/rhythmgame/projects");
-        dir.mkdirs();
-        File file = new File(dir, filename + ".json");
+        File file = new File(root, filename + ".json");
 
         try {
+            Log.d(TAG, file.getAbsolutePath());
             file.createNewFile();
             FileOutputStream f = new FileOutputStream(file);
             PrintWriter pw = new PrintWriter(f);

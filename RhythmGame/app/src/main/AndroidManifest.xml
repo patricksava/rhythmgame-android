@@ -3,6 +3,7 @@
     package="br.com.psava.rhythmgame">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -26,6 +27,11 @@
 
         <activity
             android:name=".GameOverActivity"
+            android:screenOrientation="landscape">
+        </activity>
+
+        <activity
+            android:name=".GameResultsActivity"
             android:screenOrientation="landscape">
         </activity>
 

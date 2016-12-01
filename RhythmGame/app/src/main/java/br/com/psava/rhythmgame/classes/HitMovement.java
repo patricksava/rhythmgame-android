@@ -30,6 +30,8 @@ public class HitMovement extends MovementAction {
     public static final int CENTRAL_SIZE = 100;
     public static final int DELAY_MILLIS = 25;
 
+    public static final int TIMING = (MAX_TIMING / TIMING_REDUCTION) * DELAY_MILLIS;
+
     private View centralView;
     private View timingView;
 
@@ -52,7 +54,7 @@ public class HitMovement extends MovementAction {
     };
 
 
-    public HitMovement(Context c, final MovementActionClickListener listener, float x, float y) {
+    public HitMovement(Context c, final MovementActionClickListener listener, float x, float y, int color) {
         super(c);
         centralView = new View(c);
         timingView = new View(c);
@@ -67,7 +69,7 @@ public class HitMovement extends MovementAction {
         centralView.setLayoutParams(new ViewGroup.LayoutParams(size, size));
         centralView.setX(MAX_TIMING/2);
         centralView.setY(MAX_TIMING/2);
-        centralView.setBackgroundResource(R.drawable.solid_blue);
+
         centralView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +92,29 @@ public class HitMovement extends MovementAction {
         timingView.setLayoutParams(new ViewGroup.LayoutParams(size + MAX_TIMING, size + MAX_TIMING));
         timingView.setX(MAX_TIMING - timing);
         timingView.setY(MAX_TIMING - timing);
-        timingView.setBackgroundResource(R.drawable.circle_line);
+
+        switch (color){
+            case 0:
+                centralView.setBackgroundResource(R.drawable.solid_blue);
+                timingView.setBackgroundResource(R.drawable.circle_line_blue);
+                break;
+            case 1:
+                centralView.setBackgroundResource(R.drawable.solid_red);
+                timingView.setBackgroundResource(R.drawable.circle_line_red);
+                break;
+            case 2:
+                centralView.setBackgroundResource(R.drawable.solid_green);
+                timingView.setBackgroundResource(R.drawable.circle_line_green);
+                break;
+            case 3:
+                centralView.setBackgroundResource(R.drawable.solid_orange);
+                timingView.setBackgroundResource(R.drawable.circle_line_orange);
+                break;
+            default:
+                centralView.setBackgroundResource(R.drawable.solid_blue);
+                timingView.setBackgroundResource(R.drawable.circle_line_blue);
+                break;
+        }
 
         this.addView(timingView);
         this.addView(centralView);
